@@ -12,25 +12,26 @@ red = (255, 0, 0)
 black = (0, 0, 0)
 yellow = (255, 255, 0)
 
-window_width = 400
-window_height = 300
+window_width = 600
+window_height = 500
 
 dis = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Snake")
 
 clock = pygame.time.Clock()
 
-snake_speed_normal = 10
-snake_speed_boost = 30
+snake_speed_normal = 30
+snake_speed_slow = 10
 snake_speed = snake_speed_normal
 snake_block = 10
 
-font_style = pygame.font.SysFont(None, 25, True)
+font_style = pygame.font.SysFont(None, 30, True)
+font_style_score = pygame.font.SysFont(None, 20, True)
 
 
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
-    dis.blit(mesg, [window_width / 6, window_height / 3])
+    dis.blit(mesg, [window_width / 5, window_height / 3])
 
 
 def end_game():
@@ -56,7 +57,7 @@ def draw_snake(snake_list):
 
 
 def display_score(score):
-    value = font_style.render("Your Score: " + str(score), True, blue)
+    value = font_style_score.render("Your Score: " + str(score), True, blue)
     dis.blit(value, [0, 0])
 
 
@@ -80,9 +81,9 @@ def randomizer(food, blitz, food_x, food_y, blitz_x, blitz_y):
 
 def game():
     global snake_speed
-    x_pos_change, y_pos_change = 0, 0
+    x_pos_change, y_pos_change = 0, snake_block
     x_pos = window_width / 2
-    y_pos = window_height / 2
+    y_pos = 0
 
     food_x, food_y, blitz_x, blitz_y = 0, 0, 0, 0
     food_x, food_y, blitz_x, blitz_y = randomizer(True, True, food_x, food_y, blitz_x, blitz_y)
@@ -150,8 +151,9 @@ def game():
 
         if x_pos == blitz_x and y_pos == blitz_y:
             food_sound.play()
+            timer = 50
             food_x, food_y, blitz_x, blitz_y = randomizer(False, True, food_x, food_y, blitz_x, blitz_y)
-            snake_speed = snake_speed_boost
+            snake_speed = snake_speed_slow
             active_blitz = True
 
         if active_blitz:
